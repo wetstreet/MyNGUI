@@ -31,6 +31,36 @@ public class MyUIRoot : MonoBehaviour
         }
     }
 
+    static GameObject instance;
+    static public GameObject Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                string name = "UI Root";
+                instance = GameObject.Find(name);
+                if (instance == null)
+                {
+                    instance = new GameObject(name);
+                    instance.AddComponent<MyUIRoot>();
+
+                    GameObject camObj = new GameObject("Camera");
+                    camObj.transform.parent = instance.transform;
+                    Camera cam = camObj.AddComponent<Camera>();
+                    cam.clearFlags = CameraClearFlags.Depth;
+                    cam.cullingMask = 1 << LayerMask.NameToLayer("UI");
+                    cam.orthographic = true;
+                    cam.orthographicSize = 1;
+                    cam.nearClipPlane = -10;
+                    cam.farClipPlane = 10;
+                    cam.depth = 1;
+                }
+            }
+            return instance;
+        }
+    }
+
     GameObject _drawCallRoot;
     public GameObject drawCallRoot
     {
