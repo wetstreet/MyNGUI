@@ -25,10 +25,7 @@ public class MyUITextureInspector : Editor
             Vector2 size = Handles.GetMainGameViewSize();
             float aspect = size.x / size.y;
             int height = MyUIRoot.activeHeight;
-            Debug.Log("activeHeight=" + height);
-            Debug.Log("aspect=" + aspect);
             int width = Mathf.RoundToInt(height * aspect);
-            Debug.Log("width=" + width);
             spSize.vector2Value = new Vector2(width, height);
         }
         serializedObject.ApplyModifiedProperties();
