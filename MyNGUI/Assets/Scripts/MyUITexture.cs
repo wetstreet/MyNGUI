@@ -7,7 +7,7 @@ using UnityEngine;
 public class MyUITexture : MonoBehaviour
 {
     public Texture texture;
-    public Vector2 size;
+    public Vector2 size = new Vector2(100,100);
 
     GameObject drawCall;
     bool needDestroy;
@@ -15,7 +15,6 @@ public class MyUITexture : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        size = new Vector2(100, 100);
         SetTexture();
     }
 
@@ -30,11 +29,22 @@ public class MyUITexture : MonoBehaviour
 
     void CreateDrawCall(string name)
     {
+#if UNITY_EDITOR
+        drawCall = UnityEditor.EditorUtility.CreateGameObjectWithHideFlags("", HideFlags.DontSave, typeof(MyUIDrawCall));
+#else
         drawCall = new GameObject();
+        drawCall.AddComponent<MyUIDrawCall>();
+#endif
+        MyUIRoot root = transform.GetComponentInParent<MyUIRoot>();
+        drawCall.transform.parent = root.drawCallRoot.transform;
+        drawCall.transform.localScale = Vector3.one;
+
         drawCall.layer = LayerMask.NameToLayer("UI");
 
         drawCall.AddComponent<MeshFilter>();
-        
+        //drawCall.transform.parent = MyUIRoot.drawcallRoot.transform;
+
+
         MeshRenderer renderer = drawCall.AddComponent<MeshRenderer>();
         renderer.sharedMaterial = new Material(Shader.Find("UI/Texture"));
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
@@ -90,14 +100,12 @@ public class MyUITexture : MonoBehaviour
 
     private void OnEnable()
     {
-        if (drawCall != null)
-            drawCall.gameObject.SetActive(true);
+        SetTexture();
     }
 
     private void OnDisable()
     {
-        if (drawCall != null)
-            drawCall.gameObject.SetActive(false);
+        DestroyImmediate(drawCall);
     }
 
     private void OnDestroy()

@@ -4,3 +4,4 @@ Temp
 /MyNGUI/MyNGUI.csproj
 /MyNGUI/MyNGUI.sln
 *.suo
+/MyNGUI/.vs/config/applicationhost.config

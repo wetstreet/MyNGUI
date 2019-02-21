@@ -31,6 +31,38 @@ public class MyUIRoot : MonoBehaviour
         }
     }
 
+    GameObject _drawCallRoot;
+    public GameObject drawCallRoot
+    {
+        get
+        {
+            if (_drawCallRoot == null)
+            {
+#if UNITY_EDITOR
+                _drawCallRoot = UnityEditor.EditorUtility.CreateGameObjectWithHideFlags("_UI_" + transform.name, HideFlags.DontSave, new System.Type[0] { });
+#else
+                _drawCallRoot = new GameObject("_UI_" + transform.name);
+#endif
+                _drawCallRoot.transform.localScale = transform.localScale;
+            }
+            return _drawCallRoot;
+        }
+    }
+
+    //private void OnEnable()
+    //{
+    //    if (drawCallRoot == null)
+    //    {
+    //        drawCallRoot = new GameObject("_UI_" + transform.name);
+    //        drawCallRoot.transform.localScale = transform.localScale;
+    //    }
+    //}
+
+    //private void OnDisable()
+    //{
+    //    DestroyImmediate(drawCallRoot);
+    //}
+
     static public int activeHeight
     {
         get
@@ -44,8 +76,8 @@ public class MyUIRoot : MonoBehaviour
 
     // Use this for initialization
     void Start () {
-		
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
