@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
+using System.Reflection;
 
 [CustomEditor(typeof(MyUITexture))]
 [CanEditMultipleObjects]
@@ -12,13 +11,26 @@ public class MyUITextureInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("texture"), new GUIContent("Texture"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("size"), new GUIContent("Size"));
-        serializedObject.ApplyModifiedProperties();
+        SerializedProperty spTexture = serializedObject.FindProperty("texture");
+        EditorGUILayout.PropertyField(spTexture, new GUIContent("Texture"));
+        SerializedProperty spSize = serializedObject.FindProperty("size");
+        EditorGUILayout.PropertyField(spSize, new GUIContent("Size"));
         if (GUILayout.Button("Snap", GUILayout.Width(40)))
         {
-            Debug.Log(Screen.width);
-            Debug.Log(Screen.height);
+            Texture tex = spTexture.objectReferenceValue as Texture;
+            spSize.vector2Value = new Vector2(tex.width, tex.height);
         }
+        if (GUILayout.Button("Full Screen", GUILayout.Width(80)))
+        {
+            Vector2 size = Handles.GetMainGameViewSize();
+            float aspect = size.x / size.y;
+            int height = MyUIRoot.activeHeight;
+            Debug.Log("activeHeight=" + height);
+            Debug.Log("aspect=" + aspect);
+            int width = Mathf.RoundToInt(height * aspect);
+            Debug.Log("width=" + width);
+            spSize.vector2Value = new Vector2(width, height);
+        }
+        serializedObject.ApplyModifiedProperties();
     }
 }

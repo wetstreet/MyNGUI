@@ -9,7 +9,6 @@ public class MyUITexture : MonoBehaviour
     public Texture texture;
     public Vector2 size;
 
-    MeshRenderer renderer;
     GameObject drawCall;
     bool needDestroy;
 
@@ -35,8 +34,8 @@ public class MyUITexture : MonoBehaviour
         drawCall.layer = LayerMask.NameToLayer("UI");
 
         drawCall.AddComponent<MeshFilter>();
-
-        renderer = drawCall.AddComponent<MeshRenderer>();
+        
+        MeshRenderer renderer = drawCall.AddComponent<MeshRenderer>();
         renderer.sharedMaterial = new Material(Shader.Find("UI/Texture"));
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         renderer.receiveShadows = false;
@@ -47,8 +46,8 @@ public class MyUITexture : MonoBehaviour
     {
         drawCall.name = "_DrawCall [" + texture.name + "]";
 
-        float x = size.x / 720;
-        float y = size.y / 720;
+        float x = size.x / 2;
+        float y = size.y / 2;
 
         Vector3 leftBot = new Vector3(-x, -y, 0);
         Vector3 rightBot = new Vector3(x, -y, 0);
