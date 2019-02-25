@@ -62,6 +62,12 @@ public class MyUITexture : MonoBehaviour
 
     void RefreshDrawCall()
     {
+        if (texture == null)
+            return;
+
+        if (drawCall == null)
+            CreateDrawCall(texture.name);
+
         drawCall.name = "_DrawCall [" + texture.name + "]";
 
         float x = size.x / 2;
@@ -156,11 +162,7 @@ public class MyUITexture : MonoBehaviour
         Gizmos.color = Color.clear;
         Gizmos.DrawCube(center, size);
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        
-    }
+    
 #endif
 
 }

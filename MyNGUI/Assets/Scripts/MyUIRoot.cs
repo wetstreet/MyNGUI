@@ -44,9 +44,11 @@ public class MyUIRoot : MonoBehaviour
                 {
                     instance = new GameObject(name);
                     instance.AddComponent<MyUIRoot>();
+                    instance.layer = LayerMask.NameToLayer("UI");
 
                     GameObject camObj = new GameObject("Camera");
                     camObj.transform.parent = instance.transform;
+                    camObj.layer = LayerMask.NameToLayer("UI");
                     Camera cam = camObj.AddComponent<Camera>();
                     cam.clearFlags = CameraClearFlags.Depth;
                     cam.cullingMask = 1 << LayerMask.NameToLayer("UI");
@@ -123,5 +125,10 @@ public class MyUIRoot : MonoBehaviour
         float size = 2f / activeHeight;
 
         transform.localScale = new Vector3(size, size, size);
+    }
+
+    private void OnDestroy()
+    {
+        DestroyImmediate(_drawCallRoot);
     }
 }

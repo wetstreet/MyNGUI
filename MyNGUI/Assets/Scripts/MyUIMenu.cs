@@ -27,6 +27,7 @@ public class MyUIMenu : MonoBehaviour {
                 obj.transform.parent = MyUIRoot.Instance.transform;
             }
         }
+        obj.transform.localScale = Vector3.one;
         Selection.activeGameObject = obj;
     }
 }
