@@ -15,6 +15,8 @@ public class MyUITextureInspector : Editor
         EditorGUILayout.PropertyField(spTexture, new GUIContent("Texture"));
         SerializedProperty spSize = serializedObject.FindProperty("size");
         EditorGUILayout.PropertyField(spSize, new GUIContent("Size"));
+        SerializedProperty spDepth = serializedObject.FindProperty("depth");
+        EditorGUILayout.PropertyField(spDepth, new GUIContent("Depth"));
         if (GUILayout.Button("Snap", GUILayout.Width(40)))
         {
             Texture tex = spTexture.objectReferenceValue as Texture;

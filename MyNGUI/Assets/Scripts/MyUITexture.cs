@@ -8,11 +8,12 @@ public class MyUITexture : MonoBehaviour
 {
     public Texture texture;
     public Vector2 size = new Vector2(100,100);
-    //public int depth; not yet implemented
+    public int depth;
 
     GameObject drawCall;
     bool needDestroy;
     Mesh mesh;
+    Material material;
 
     // Use this for initialization
     void Start ()
@@ -50,11 +51,10 @@ public class MyUITexture : MonoBehaviour
         drawCall.layer = LayerMask.NameToLayer("UI");
 
         drawCall.AddComponent<MeshFilter>();
-        //drawCall.transform.parent = MyUIRoot.drawcallRoot.transform;
-
-
+        
         MeshRenderer renderer = drawCall.AddComponent<MeshRenderer>();
-        renderer.sharedMaterial = new Material(Shader.Find("UI/Texture"));
+        material = new Material(Shader.Find("UI/Texture"));
+        renderer.sharedMaterial = material;
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         renderer.receiveShadows = false;
         renderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
@@ -99,9 +99,11 @@ public class MyUITexture : MonoBehaviour
         mesh.vertices = rtpVerts.ToArray();
         mesh.uv = uvList.ToArray();
         mesh.triangles = triangles;
-
+        
         drawCall.GetComponent<MeshFilter>().mesh = mesh;
         drawCall.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = texture;
+
+        material.renderQueue = 3000 + depth;
     }
 
     void SetTexture()
