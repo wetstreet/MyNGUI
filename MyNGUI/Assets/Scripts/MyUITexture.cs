@@ -8,10 +8,11 @@ public class MyUITexture : MonoBehaviour
 {
     public Texture texture;
     public Vector2 size = new Vector2(100,100);
-    public int depth;
+    //public int depth; not yet implemented
 
     GameObject drawCall;
     bool needDestroy;
+    Mesh mesh;
 
     // Use this for initialization
     void Start ()
@@ -25,6 +26,12 @@ public class MyUITexture : MonoBehaviour
         {
             DestroyImmediate(drawCall);
             needDestroy = false;
+        }
+
+        // update transform in editor mode
+        if (!Application.isPlaying)
+        {
+            RefreshDrawCall();
         }
     }
 
@@ -66,6 +73,15 @@ public class MyUITexture : MonoBehaviour
         Vector3 leftTop = new Vector3(-x, y, 0);
         List<Vector3> vertexList = new List<Vector3>() { leftBot, rightBot, rightTop, leftTop };
 
+        // relative to parent vertices
+        List<Vector3> rtpVerts = new List<Vector3>();
+        
+        Matrix4x4 mat = transform.parent.worldToLocalMatrix * transform.localToWorldMatrix;
+        foreach (Vector3 v in vertexList)
+        {
+            rtpVerts.Add(mat.MultiplyPoint3x4(v));
+        }
+
         Vector3 leftBotUV = new Vector2(0, 0);
         Vector3 rightBotUV = new Vector2(1, 0);
         Vector3 rightTopUV = new Vector2(1, 1);
@@ -74,10 +90,13 @@ public class MyUITexture : MonoBehaviour
 
         int[] triangles = { 0, 2, 1, 0, 3, 2 };
 
-        Mesh mesh = new Mesh();
-        mesh.hideFlags = HideFlags.DontSave;
-        mesh.name = "[MyNGUI] Mesh";
-        mesh.vertices = vertexList.ToArray();
+        if (mesh == null)
+        {
+            mesh = new Mesh();
+            mesh.hideFlags = HideFlags.DontSave;
+            mesh.name = "[MyNGUI] Mesh";
+        }
+        mesh.vertices = rtpVerts.ToArray();
         mesh.uv = uvList.ToArray();
         mesh.triangles = triangles;
 
