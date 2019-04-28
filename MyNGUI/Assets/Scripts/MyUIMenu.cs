@@ -4,13 +4,8 @@ using UnityEngine;
 using UnityEditor;
 
 public class MyUIMenu : MonoBehaviour {
-    [MenuItem("MyNGUI/Create Texture")]
-    public static void CreateTexture()
+    public static void SetParentAndSelect(GameObject obj)
     {
-        GameObject obj = new GameObject("Texture");
-        obj.layer = LayerMask.NameToLayer("UI");
-        obj.AddComponent<MyUITexture>();
-
         GameObject selectedObj = Selection.activeGameObject;
         if (selectedObj == null)
         {
@@ -29,5 +24,26 @@ public class MyUIMenu : MonoBehaviour {
         }
         obj.transform.localScale = Vector3.one;
         Selection.activeGameObject = obj;
+    }
+
+    [MenuItem("MyNGUI/Create Texture")]
+    public static void CreateTexture()
+    {
+        GameObject obj = new GameObject("Texture");
+        obj.layer = LayerMask.NameToLayer("UI");
+        obj.AddComponent<MyUITexture>();
+
+        SetParentAndSelect(obj);
+    }
+
+
+    [MenuItem("MyNGUI/Create Label")]
+    public static void CreateLabel()
+    {
+        GameObject obj = new GameObject("Label");
+        obj.layer = LayerMask.NameToLayer("UI");
+        obj.AddComponent<MyUILabel>();
+
+        SetParentAndSelect(obj);
     }
 }
